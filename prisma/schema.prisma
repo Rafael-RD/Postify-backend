@@ -38,6 +38,6 @@ model Publication {
   scheduledAt DateTime
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  Media       Media    @relation(fields: [mediaId], references: [id])
-  Post        Post     @relation(fields: [postId], references: [id])
+  Media       Media    @relation(fields: [mediaId], references: [id], onDelete: Restrict)
+  Post        Post     @relation(fields: [postId], references: [id], onDelete: Restrict)
 }
