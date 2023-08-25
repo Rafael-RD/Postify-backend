@@ -6,11 +6,11 @@ import { ConflictError, NotFoundError } from '../errors';
 
 @Injectable()
 export class MediasService {
-  constructor(private readonly repository: MediasRepository) { }
+  constructor(private readonly MediasRepository: MediasRepository) { }
 
   async create(createMediaDto: CreateMediaDto) {
     try {
-      const createdMedia = await this.repository.create(createMediaDto);
+      const createdMedia = await this.MediasRepository.create(createMediaDto);
       return createdMedia;
     } catch (error) {
       if (error.code === 'P2002') {
@@ -23,12 +23,12 @@ export class MediasService {
   }
 
   async findAll() {
-    return await this.repository.findAll();
+    return await this.MediasRepository.findAll();
   }
 
   async findOne(id: number) {
     try {
-      const media = await this.repository.findOne(id);
+      const media = await this.MediasRepository.findOne(id);
       return media;
     } catch (error) {
       if (error.code === 'P2025') {
@@ -42,7 +42,7 @@ export class MediasService {
 
   async update(id: number, updateMediaDto: UpdateMediaDto) {
     try {
-      const updatedMedia = await this.repository.update(id, updateMediaDto);
+      const updatedMedia = await this.MediasRepository.update(id, updateMediaDto);
       return updateMediaDto;
     } catch (error) {
       if (error.code === 'P2025') {
@@ -58,7 +58,7 @@ export class MediasService {
 
   async remove(id: number) {
     try {
-      const deletedMedia = await this.repository.remove(id);
+      const deletedMedia = await this.MediasRepository.remove(id);
       return deletedMedia;
     } catch (error) { //TODO: error if entity is related to publication
       if (error.code === 'P2025') {
