@@ -54,7 +54,7 @@ export class PostsService {
     try {
       const deletedPost = await this.postsRepository.remove(id);
       return deletedPost;
-    } catch (error) { //TODO: error if entity is related to publication
+    } catch (error) {
       if (error.code === 'P2025') {
         throw new NotFoundError('post', id);
       } else if (error.code === 'P2003') {
