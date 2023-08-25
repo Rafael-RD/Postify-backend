@@ -43,13 +43,19 @@ export class PublicationsService {
 
   async update(id: number, updatePublicationDto: UpdatePublicationDto) {
     try {
+      const publication = await this.publicationsRepository.findOne(id);
+      if (publication.scheduledAt < new Date()) throw new HttpException('Publication already published', HttpStatus.FORBIDDEN);
       const updatedPublication = await this.publicationsRepository.update(id, updatePublicationDto);
       return updatedPublication;
     } catch (error) {
+      if (error.status == 403) throw new HttpException('Publication already published', HttpStatus.FORBIDDEN);
       if (error.code === 'P2025') {
         throw new NotFoundError('publication', id);
+      } else if (error.code === 'P2003') {
+        const constraint = error.meta.field_name.split('_')[1];
+        throw new NotFoundError(constraint, updatePublicationDto[constraint]);
       } else {
-        console.error(error);
+        console.error({ error });
         throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
       }
     }
