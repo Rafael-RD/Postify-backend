@@ -18,8 +18,8 @@ export class MediasController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.mediasService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.mediasService.findOne(id);
   }
 
   @Put(':id')
@@ -28,7 +28,7 @@ export class MediasController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.mediasService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.mediasService.remove(id);
   }
 }
