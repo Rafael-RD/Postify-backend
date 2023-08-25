@@ -6,12 +6,10 @@ import { ConflictError, NotFoundError } from '../errors';
 
 @Injectable()
 export class MediasService {
-
   constructor(private readonly repository: MediasRepository) { }
 
   async create(createMediaDto: CreateMediaDto) {
     try {
-
       const createdMedia = await this.repository.create(createMediaDto);
       return createdMedia;
     } catch (error) {
@@ -25,7 +23,7 @@ export class MediasService {
   }
 
   async findAll() {
-    return this.repository.findAll();
+    return await this.repository.findAll();
   }
 
   async findOne(id: number) {
@@ -62,7 +60,7 @@ export class MediasService {
     try {
       const deletedMedia = await this.repository.remove(id);
       return deletedMedia;
-    } catch (error) { //TODO: error if media is related to publication
+    } catch (error) { //TODO: error if entity is related to publication
       if (error.code === 'P2025') {
         throw new NotFoundError('media', id);
       } else {
