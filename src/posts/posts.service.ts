@@ -1,26 +1,66 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { PostsRepository } from './posts.repository';
+import { NotFoundError } from '../errors';
 
 @Injectable()
 export class PostsService {
-  create(createPostDto: CreatePostDto) {
-    return 'This action adds a new post';
+  constructor(private readonly postsRepository: PostsRepository) { }
+
+  async create(createPostDto: CreatePostDto) {
+    try {
+      const createdPost = await this.postsRepository.create(createPostDto);
+      return createdPost;
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
-  findAll() {
-    return `This action returns all posts`;
+  async findAll() {
+    return await this.postsRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+  async findOne(id: number) {
+    try {
+      const post = await this.postsRepository.findOne(id);
+      return post;
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundError('post', id);
+      } else {
+        console.error(error);
+        throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    }
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+  async update(id: number, updatePostDto: UpdatePostDto) {
+    try {
+      const updatedPost = await this.postsRepository.update(id, updatePostDto);
+      return updatedPost;
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundError('post', id);
+      } else {
+        console.error(error);
+        throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  async remove(id: number) {
+    try {
+      const deletedPost = await this.postsRepository.remove(id);
+      return deletedPost;
+    } catch (error) { //TODO: error if entity is related to publication
+      if (error.code === 'P2025') {
+        throw new NotFoundError('post', id);
+      } else {
+        console.error(error);
+        throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    };
   }
 }
