@@ -2,8 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateMediaDto } from './dto/create-media.dto';
 import { UpdateMediaDto } from './dto/update-media.dto';
 import { MediasRepository } from './medias.repository';
-import { MediaNotFound } from '../errors/media-not-found.exception';
-import { MediaConflict } from '../errors/media-conflict.exception';
+import { ConflictError, NotFoundError } from '../errors';
 
 @Injectable()
 export class MediasService {
@@ -17,7 +16,7 @@ export class MediasService {
       return createdMedia;
     } catch (error) {
       if (error.code === 'P2002') {
-        throw new MediaConflict();
+        throw new ConflictError('media');
       } else {
         console.error(error);
         throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
@@ -35,7 +34,7 @@ export class MediasService {
       return media;
     } catch (error) {
       if (error.code === 'P2025') {
-        throw new MediaNotFound(id);
+        throw new NotFoundError('media', id);
       } else {
         console.error(error);
         throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
@@ -49,9 +48,9 @@ export class MediasService {
       return updateMediaDto;
     } catch (error) {
       if (error.code === 'P2025') {
-        throw new MediaNotFound(id);
+        throw new NotFoundError('media', id);
       } else if (error.code === 'P2002') {
-        throw new MediaConflict();
+        throw new ConflictError('media');
       } else {
         console.error(error);
         throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
@@ -65,7 +64,7 @@ export class MediasService {
       return deletedMedia;
     } catch (error) { //TODO: error if media is related to publication
       if (error.code === 'P2025') {
-        throw new MediaNotFound(id);
+        throw new NotFoundError('media', id);
       } else {
         console.error(error);
         throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
