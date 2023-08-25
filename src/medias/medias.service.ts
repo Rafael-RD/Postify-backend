@@ -50,6 +50,8 @@ export class MediasService {
     } catch (error) {
       if (error.code === 'P2025') {
         throw new MediaNotFound(id);
+      } else if (error.code === 'P2002') {
+        throw new MediaConflict();
       } else {
         console.error(error);
         throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
