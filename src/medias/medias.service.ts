@@ -61,7 +61,7 @@ export class MediasService {
     try {
       const deletedMedia = await this.repository.remove(id);
       return deletedMedia;
-    } catch (error) {
+    } catch (error) { //TODO: error if media is related to publication
       if (error.code === 'P2025') {
         throw new MediaNotFound(id);
       } else {
