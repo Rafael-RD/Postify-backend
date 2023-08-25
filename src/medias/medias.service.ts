@@ -43,7 +43,7 @@ export class MediasService {
   async update(id: number, updateMediaDto: UpdateMediaDto) {
     try {
       const updatedMedia = await this.MediasRepository.update(id, updateMediaDto);
-      return updateMediaDto;
+      return updatedMedia;
     } catch (error) {
       if (error.code === 'P2025') {
         throw new NotFoundError('media', id);
