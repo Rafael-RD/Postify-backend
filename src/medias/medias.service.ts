@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateMediaDto } from './dto/create-media.dto';
 import { UpdateMediaDto } from './dto/update-media.dto';
 import { MediasRepository } from './medias.repository';
-import { ConflictError, NotFoundError } from '../errors';
+import { ConflictError, ConstraintError, NotFoundError } from '../errors';
 
 @Injectable()
 export class MediasService {
@@ -60,9 +60,11 @@ export class MediasService {
     try {
       const deletedMedia = await this.MediasRepository.remove(id);
       return deletedMedia;
-    } catch (error) { //TODO: error if entity is related to publication
+    } catch (error) {
       if (error.code === 'P2025') {
         throw new NotFoundError('media', id);
+      } else if (error.code === 'P2003') {
+        throw new ConstraintError('publication');
       } else {
         console.error(error);
         throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);

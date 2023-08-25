@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PostsRepository } from './posts.repository';
-import { NotFoundError } from '../errors';
+import { ConstraintError, NotFoundError } from '../errors';
 
 @Injectable()
 export class PostsService {
@@ -57,6 +57,8 @@ export class PostsService {
     } catch (error) { //TODO: error if entity is related to publication
       if (error.code === 'P2025') {
         throw new NotFoundError('post', id);
+      } else if (error.code === 'P2003') {
+        throw new ConstraintError('publication');
       } else {
         console.error(error);
         throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);

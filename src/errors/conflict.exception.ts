@@ -6,4 +6,4 @@ export class ConflictError extends HttpException {
   }
 }
 
-type Entity = 'post' | 'media' | 'publication';
+type Entity = 'post' | 'media' | 'publication' | string;
