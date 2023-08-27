@@ -23,8 +23,9 @@ export class PublicationsService {
     }
   }
 
-  async findAll() {
-    return await this.publicationsRepository.findAll();
+  async findAll(published: boolean | undefined, after: string | undefined) {
+    const afterDate = after === undefined ? undefined : new Date(after);
+    return await this.publicationsRepository.findAll(published, afterDate);
   }
 
   async findOne(id: number) {
