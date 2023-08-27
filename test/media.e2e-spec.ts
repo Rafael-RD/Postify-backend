@@ -3,7 +3,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { PrismaService } from "../src/prisma/prisma.service";
 import * as request from 'supertest';
 import { MediasModule } from "../src/medias/medias.module";
-import { MediaFactory } from "./factories/media.factory";
+import { MediaFactory } from "./factories";
 import { Media } from "@prisma/client";
 
 describe('MediaController (e2e)', () => {
@@ -32,8 +32,6 @@ describe('MediaController (e2e)', () => {
 
   it('/medias/:id (GET)', async () => {
     const media = await MediaFactory.createInDB();
-
-    console.log(media.createdAt instanceof Date)
 
     const res = await request(app.getHttpServer())
       .get(`/medias/${media.id}`);
