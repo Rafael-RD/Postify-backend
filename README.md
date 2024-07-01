@@ -48,23 +48,35 @@ npm run start:prod
 ### Medias
 
 `GET /medias`: get all social medias.
+
 `GET /medias/{id}`: get social media by id.
+
 `POST /medias`: create social media, body: { title: "title", username: "username" }.
+
 `PUT /medias/{id}`: update social media by id, body: { title: "title", username: "username" }.
+
 `DELETE /medias/{id}`: delete social media by id.
 
 ### Posts
 
 `GET /posts`: get all posts.
+
 `GET /posts/{id}`: get post by id.
+
 `POST /posts`: create post, body: { title: "title", text: "text", image: "url" }.
+
 `PUT /posts/{id}`: update post by id, body: { title: "title", text: "text", image: "url" }.
+
 `DELETE /posts/{id}`: delete post by id.
 
 ### Publications
 
 `GET /publications`: get all publications.
+
 `GET /publications/{id}`: get publication by id.
+
 `POST /publications`: create publication, body: { mediaId: "mediaId", postId: "postId", scheduledAt: "date" }.
+
 `PUT /publications/{id}`: update publication by id, body: { mediaId: "mediaId", postId: "postId", scheduledAt: "date" }.
+
 `DELETE /publications/{id}`: delete publication by id.
